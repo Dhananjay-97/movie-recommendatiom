@@ -2,7 +2,7 @@ import logging
 from fastapi import FastAPI, APIRouter, HTTPException
 from neo4j import GraphDatabase, basic_auth
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any, Union
+from typing import List, Optional, Dict
 from datetime import datetime
 
 # Set up logging
@@ -21,9 +21,6 @@ app = FastAPI()
 router = APIRouter()
 
 # Pydantic models
-class NodeProperty(BaseModel):
-    type: str
-
 class Node(BaseModel):
     id: int
     labels: List[str]
@@ -59,35 +56,18 @@ def fetch_schema(driver):
     logger.info("Fetching schema information")
     with driver.session() as session:
         result = session.run(query)
-        if not result:
-            logger.warning("No schema information returned")
-            return {}
-
-        record = result.single()
-        if not record:
-            logger.warning("Schema visualization query returned no records")
-            return {}
-
-        nodes = record.get("nodes", [])
-
+        nodes = result.single().get("nodes", []) if result else []
         node_properties = {}
-
         for node in nodes:
             labels = ":".join(node["labels"])
             node_properties[labels] = {prop["propertyKey"]: determine_type(prop["propertyValue"]) for prop in node["properties"]}
-
         logger.info(f"Fetched schema properties for nodes: {node_properties}")
         return node_properties
 
 # Fetch nodes from Neo4j
 def fetch_nodes_from_neo4j(driver):
     node_properties = fetch_schema(driver)
-
-    query = """
-    MATCH (n)
-    RETURN n
-    LIMIT 10
-    """
+    query = "MATCH (n) RETURN n LIMIT 10"
     logger.info("Fetching nodes from Neo4j")
     with driver.session() as session:
         result = session.run(query)
@@ -96,18 +76,8 @@ def fetch_nodes_from_neo4j(driver):
             node = record["n"]
             labels_key = ":".join(node.labels)
             node_props_schema = node_properties.get(labels_key, {})
-
-            node_properties_types = {
-                prop_key: prop_type
-                for prop_key, prop_type in node_props_schema.items()
-            }
-
-            nodes_list.append(Node(
-                id=node.id,
-                labels=node.labels,
-                properties=node_properties_types
-            ))
-
+            node_properties_types = {prop_key: prop_type for prop_key, prop_type in node_props_schema.items()}
+            nodes_list.append(Node(id=node.id, labels=node.labels, properties=node_properties_types))
         logger.info(f"Fetched nodes: {nodes_list}")
         return nodes_list
 
