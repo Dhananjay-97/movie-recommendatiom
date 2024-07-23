@@ -50,23 +50,8 @@ def determine_type(value):
     else:
         return "string"
 
-# Fetch schema information
-def fetch_schema(driver):
-    query = "CALL db.schema.visualization()"
-    logger.info("Fetching schema information")
-    with driver.session() as session:
-        result = session.run(query)
-        nodes = result.single().get("nodes", []) if result else []
-        node_properties = {}
-        for node in nodes:
-            labels = ":".join(node["labels"])
-            node_properties[labels] = {prop["propertyKey"]: determine_type(prop["propertyValue"]) for prop in node["properties"]}
-        logger.info(f"Fetched schema properties for nodes: {node_properties}")
-        return node_properties
-
 # Fetch nodes from Neo4j
 def fetch_nodes_from_neo4j(driver):
-    node_properties = fetch_schema(driver)
     query = "MATCH (n) RETURN n LIMIT 10"
     logger.info("Fetching nodes from Neo4j")
     with driver.session() as session:
@@ -74,10 +59,12 @@ def fetch_nodes_from_neo4j(driver):
         nodes_list = []
         for record in result:
             node = record["n"]
-            labels_key = ":".join(node.labels)
-            node_props_schema = node_properties.get(labels_key, {})
-            node_properties_types = {prop_key: prop_type for prop_key, prop_type in node_props_schema.items()}
-            nodes_list.append(Node(id=node.id, labels=node.labels, properties=node_properties_types))
+            properties = {key: determine_type(value) for key, value in node.items()}
+            nodes_list.append(Node(
+                id=node.id,
+                labels=node.labels,
+                properties=properties
+            ))
         logger.info(f"Fetched nodes: {nodes_list}")
         return nodes_list
 
