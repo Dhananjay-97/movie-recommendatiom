@@ -1,0 +1,41 @@
+/* Dark theme UI inspired by the provided mockup */
+:root{
+  --bg:#07060a;
+  --panel:#0f1116;
+  --muted:#bfc1c9;
+  --accent1:#7c4dff; /* purple */
+  --accent2:#6b2bff; /* deep violet */
+  --chip-border: rgba(255,255,255,0.07);
+}
+@font-face{font-family:ColfaxAI;src:url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format("woff2");}
+*{box-sizing:border-box}
+body{font-family:ColfaxAI,system-ui,Segoe UI,Roboto,Helvetica,Arial;min-height:100vh;margin:0;background:linear-gradient(180deg,#050407 0%,#0b0b0f 100%);color:#e6e6e9;display:flex;flex-direction:column;align-items:center}
+.site-header{margin-top:36px;text-align:center}
+.brand{display:flex;align-items:center;gap:14px;justify-content:center}
+.brand-icon{width:44px;height:44px;filter:brightness(1.6) saturate(0.9)}
+.title{font-size:44px;margin:0;letter-spacing:-1px}
+.accent{color:var(--accent1);font-weight:800}
+.subtitle{color:var(--muted);max-width:920px;margin-top:8px}
+.hero{width:100%;display:flex;justify-content:center;padding:36px 20px}
+.panel{width:980px;max-width:96%;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:14px;padding:28px 28px;display:flex;gap:24px;box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+.panel-left{flex:1;display:flex;flex-direction:column;gap:18px}
+.panel-right{width:360px;display:flex;flex-direction:column;gap:16px}
+.section{padding:6px 2px}
+.section.small label{display:block;margin-bottom:8px;color:var(--muted)}
+.section-title{font-size:14px;margin:0 0 10px 0;color:#e9e9ee}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:transparent;border:1px solid var(--chip-border);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600;transition:all .15s;outline:none}
+.chip:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.12)}
+.chip.selected{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:none;color:white;box-shadow:0 6px 18px rgba(107,43,255,0.18)}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+select{width:100%;background:#0b0b10;border:1px solid rgba(255,255,255,0.04);color:#e6e6e9;padding:10px;border-radius:8px}
+textarea{width:100%;min-height:120px;background:#0b0b10;border:1px solid rgba(255,255,255,0.04);color:#e6e6e9;padding:12px;border-radius:8px;resize:vertical}
+.primary{width:100%;padding:14px;border-radius:12px;border:none;color:white;font-weight:700;background:linear-gradient(90deg,var(--accent1),var(--accent2));cursor:pointer;box-shadow:0 10px 30px rgba(108,45,255,0.22);font-size:16px}
+.results{margin-top:22px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);width:980px;max-width:96%}
+.result{white-space:pre-wrap;color:var(--muted);line-height:1.6}
+@media (max-width:880px){
+  .panel{flex-direction:column;padding:20px}
+  .panel-right{width:auto}
+  .title{font-size:32px}
+  .brand-icon{width:36px}
+}

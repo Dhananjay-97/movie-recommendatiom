@@ -8,24 +8,115 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='movie-icon.png') }}" />
   </head>
   <body>
-    <img src="https://cdn-icons-png.flaticon.com/512/2503/2503508.png" class="icon" alt="Movie Icon" />
-    <h3>Movie GenAI Recommender</h3>
-    
-    <form action="/" method="post">
-      <label for="category">Genre or Mood</label>
-      <input type="text" name="category" placeholder="e.g. Sci-Fi, Sad, 90s Action" required />
-      
-      <label for="number">Number of Recommendations</label>
-      <input type="number" name="number" placeholder="5" min="1" max="10" required />
-      
-      <input type="submit" value="Generate Recommendations" />
-    </form>
-    
-    {% if result %}
-    <div class="result-container">
-        <h4>Top Picks:</h4>
+    <header class="site-header">
+      <div class="brand">
+        <img src="/static/movie.png" class="brand-icon" alt="CineMatch" />
+        <h1 class="title">CineMatch<span class="accent">AI</span></h1>
+      </div>
+      <p class="subtitle">Your personal AI cinema curator. Tell us your vibe, and we'll scan the archives to find your next favorite film.</p>
+    </header>
+
+    <main class="hero">
+      <form id="discoverForm" action="/" method="post" class="panel">
+        <div class="panel-left">
+          <div class="section">
+            <h3 class="section-title">Pick Genres</h3>
+            <div class="chips" data-type="genre">
+              <button type="button" class="chip">Action</button>
+              <button type="button" class="chip">Comedy</button>
+              <button type="button" class="chip">Drama</button>
+              <button type="button" class="chip">Horror</button>
+              <button type="button" class="chip">Sci‑Fi</button>
+              <button type="button" class="chip">Thriller</button>
+              <button type="button" class="chip">Romance</button>
+              <button type="button" class="chip">Documentary</button>
+              <button type="button" class="chip">Anime</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3 class="section-title">What's the Mood?</h3>
+            <div class="chips" data-type="mood">
+              <button type="button" class="chip">Happy</button>
+              <button type="button" class="chip">Sad</button>
+              <button type="button" class="chip">Excited</button>
+              <button type="button" class="chip">Relaxed</button>
+              <button type="button" class="chip">Melancholy</button>
+              <button type="button" class="chip">Thoughtful</button>
+              <button type="button" class="chip">Adventurous</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-right">
+          <div class="section small">
+            <label for="era">Specific Era</label>
+            <select name="era" id="era">
+              <option>Any Era</option>
+              <option>1920s</option>
+              <option>1950s</option>
+              <option>1970s</option>
+              <option>1980s</option>
+              <option>1990s</option>
+              <option>2000s</option>
+              <option>2010s</option>
+              <option>2020s</option>
+            </select>
+          </div>
+
+          <div class="section">
+            <label for="vibe">Describe the vibe (Optional)</label>
+            <textarea id="vibe" name="vibe" placeholder="e.g. A rainy mystery in London, or something with a killer soundtrack..."></textarea>
+          </div>
+
+          <div class="section action">
+            <input type="hidden" name="category" id="category" value="" />
+            <input type="hidden" name="number" value="5" />
+            <button type="submit" class="primary">Generate My Watchlist</button>
+          </div>
+        </div>
+
+      </form>
+
+      {% if result %}
+      <section class="results">
+        <h4>Top Picks</h4>
         <div class="result">{{ result }}</div>
-    </div>
-    {% endif %}
+      </section>
+      {% endif %}
+    </main>
+
+    <script>
+      // Small script to aggregate selections into the hidden `category` input
+      (function(){
+        const form = document.getElementById('discoverForm');
+        const categoryInput = document.getElementById('category');
+        function gather() {
+          const selected = [];
+          document.querySelectorAll('.chips').forEach(group=>{
+            const type = group.dataset.type;
+            group.querySelectorAll('.chip.selected').forEach(btn=>{
+              selected.push(btn.textContent + (type==='mood' ? ' (mood)' : ''));
+            });
+          });
+          const era = document.getElementById('era').value;
+          const vibe = document.getElementById('vibe').value.trim();
+          let composed = selected.join(', ');
+          if (era && era !== 'Any Era') composed += (composed? ', ' : '') + era;
+          if (vibe) composed += (composed? ', ' : '') + vibe;
+          categoryInput.value = composed || 'Any';
+        }
+        document.querySelectorAll('.chip').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            btn.classList.toggle('selected');
+            gather();
+          });
+        });
+        document.getElementById('era').addEventListener('change', gather);
+        document.getElementById('vibe').addEventListener('input', gather);
+        // initial gather
+        gather();
+      })();
+    </script>
   </body>
 </html>
