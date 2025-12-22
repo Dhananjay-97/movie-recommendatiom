@@ -1,38 +1,31 @@
-import os, openai
-from flask import Flask, redirect, render_template, request, url_for
-
-app = Flask(__name__)
-openai.api_key = os.getenv("REDACTED")
-
-
-@app.route("/", methods=("GET", "POST"))
-def index():
-    if request.method == "POST":
-        category = request.form["category"]
-        number = request.form["number"]
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=generate_prompt(number, category),
-            temperature=0.5,
-            max_tokens=100,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0
-        )
-
-        return redirect(url_for("index", result=response.choices[0].text))
-
-    result = request.args.get("result")
-    return render_template("index.html", result=result)
-
-
-def generate_prompt(number, category):
-    return """Recommend the best {} {} movies to watch:""".format(number,
-        category.capitalize()
-    )
-
-
-
-if __name__ == '__main__':
-  app.run(host='127.0.0.1', port=5050, debug=True)
-  
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='movie-icon.png') }}" />
+  </head>
+  <body>
+    <img src="https://cdn-icons-png.flaticon.com/512/2503/2503508.png" class="icon" alt="Movie Icon" />
+    <h3>Movie GenAI Recommender</h3>
+    
+    <form action="/" method="post">
+      <label for="category">Genre or Mood</label>
+      <input type="text" name="category" placeholder="e.g. Sci-Fi, Sad, 90s Action" required />
+      
+      <label for="number">Number of Recommendations</label>
+      <input type="number" name="number" placeholder="5" min="1" max="10" required />
+      
+      <input type="submit" value="Generate Recommendations" />
+    </form>
+    
+    {% if result %}
+    <div class="result-container">
+        <h4>Top Picks:</h4>
+        <div class="result">{{ result }}</div>
+    </div>
+    {% endif %}
+  </body>
+</html>

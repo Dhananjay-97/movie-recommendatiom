@@ -1,55 +1,51 @@
 @font-face {
   font-family: "ColfaxAI";
-  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
-      format("woff2"),
-    url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format("woff2"),
+       url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "ColfaxAI";
   src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),
-    url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
+       url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
   font-weight: bold;
   font-style: normal;
 }
-body,
-input {
-  font-size: 16px;
-  line-height: 24px;
-  color: #353740;
-  font-family: "ColfaxAI", Helvetica, sans-serif;
-}
 body {
+  font-family: "ColfaxAI", Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 60px;
+  background-color: #f5f5f5;
+  color: #353740;
 }
 .icon {
-  width: 34px;
+  width: 64px;
+  margin-bottom: 20px;
 }
 h3 {
   font-size: 32px;
-  line-height: 40px;
   font-weight: bold;
-  color: #202123;
-  margin: 16px 0 40px;
+  margin-bottom: 40px;
 }
 form {
   display: flex;
   flex-direction: column;
   width: 320px;
 }
-input[type="text"] {
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+input[type="text"], input[type="number"] {
   padding: 12px 16px;
-  border: 1px solid #10a37f;
+  border: 1px solid #d9d9e3;
   border-radius: 4px;
   margin-bottom: 24px;
-}
-::placeholder {
-  color: #8e8ea0;
-  opacity: 1;
+  outline-color: #10a37f;
 }
 input[type="submit"] {
   padding: 12px 0;
@@ -57,15 +53,22 @@ input[type="submit"] {
   background-color: #10a37f;
   border: none;
   border-radius: 4px;
-  text-align: center;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+input[type="submit"]:hover {
+  background-color: #1a7f64;
+}
+.result-container {
+  margin-top: 30px;
+  width: 80%;
+  max-width: 600px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 .result {
-  font-weight: bold;
-  margin-top: 40px;
   white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
+  line-height: 1.6;
 }

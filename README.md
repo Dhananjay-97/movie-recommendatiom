@@ -1,28 +1,66 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask&demo-title=Flask%20%2B%20Vercel&demo-description=Use%20Flask%202%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+# 🎬 AI Movie Recommender
 
-# Flask + Vercel
+A GenAI-powered application that recommends movies based on category, genre, or mood using OpenAI's GPT models. Built with Flask and deployed on Vercel.
 
-This example shows how to use Flask 2 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+## Features
+- **Smart Recommendations:** Uses GPT-3.5-Turbo to understand nuance (e.g., "Sad movies from the 90s that end happily").
+- **Customizable:** Choose the specific number of recommendations.
+- **Serverless:** Runs entirely on Vercel functions.
 
-## Demo
+## Prerequisites
+1.  **OpenAI API Key**: You need an account at [platform.openai.com](https://platform.openai.com).
+2.  **Python 3.9+** installed locally.
 
-https://flask-python-template.vercel.app/
+## 🚀 Running Locally
 
-## How it Works
+Follow these steps to get the app running on your machine:
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to enable handling requests on Vercel with Serverless Functions.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/dhananjaylab-movie-recommendatiom.git
+    cd dhananjaylab-movie-recommendatiom
+    ```
 
-## Running Locally
+2.  **Set up Environment Variables:**
+    Create a `.env` file in the root directory:
+    ```bash
+    # Mac/Linux
+    touch .env
+    ```
+    Add your API key inside `.env`:
+    ```text
+    REDACTED=sk-your-actual-api-key-here
+    FLASK_ENV=development
+    ```
 
-```bash
-npm i -g vercel
-vercel dev
-```
+3.  **Install Dependencies:**
+    It is recommended to use a virtual environment.
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
 
-Your Flask application is now available at `http://localhost:3000`.
+4.  **Run the Application:**
+    ```bash
+    flask --app api/index run
+    ```
 
-## One-Click Deploy
+5.  **Open in Browser:**
+    Navigate to `http://127.0.0.1:5000`.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+## ☁️ Deployment (Vercel)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Fflask&demo-title=Flask%20%2B%20Vercel&demo-description=Use%20Flask%202%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fflask-python-template.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994156/random/flask.png)
+1.  Install Vercel CLI: `npm i -g vercel`
+2.  Run `vercel login`
+3.  Run `vercel` in the project root.
+4.  **Important:** When asked for Environment Variables in the Vercel dashboard, add `REDACTED` with your key value.
+
+## Project Structure
+```text
+├── api/
+│   ├── index.py           # Main Flask Application
+│   ├── static/            # CSS and Images
+│   └── templates/         # HTML Files
+├── requirements.txt       # Python dependencies
+└── vercel.json           # Deployment configuration
